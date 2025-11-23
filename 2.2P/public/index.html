@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express App - 2.2P</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Express App</h1>
+        <p>This is a simple Express.js application</p>
+        
+        <div class="card">
+            <h2>API Endpoints</h2>
+            <ul>
+                <li><strong>GET /api/hello</strong> - Get a hello message</li>
+                <li><strong>GET /api/time</strong> - Get current server time</li>
+                <li><strong>POST /api/echo</strong> - Echo back your data</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Test API</h2>
+            <button onclick="testHello()">Test Hello API</button>
+            <button onclick="testTime()">Test Time API</button>
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
