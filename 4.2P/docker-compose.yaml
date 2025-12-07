@@ -1,0 +1,18 @@
+
+services:
+  # App service removed to run locally
+  # Run 'npm start' in your terminal to start the Express server
+
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=locate_a_socket
+    ports:
+      - "3307:3306" # Mapped to 3307 to avoid conflict with local MySQL on 3306
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  db_data:
