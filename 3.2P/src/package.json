@@ -1,0 +1,15 @@
+{
+  "name": "sit725-2025-t1-prac3",
+  "version": "1.0.0",
+  "description": "SIT 725 Week 3 Prac - Plants App",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Student",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
