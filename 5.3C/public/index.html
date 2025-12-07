@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Books Catalog</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .search-container {
+      margin-bottom: 30px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+
+    .search-button {
+      padding: 12px 25px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .search-button:hover {
+      background-color: #0056b3;
+    }
+
+    .clear-button {
+      padding: 12px 25px;
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .clear-button:hover {
+      background-color: #545b62;
+    }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .book-card {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+
+    .book-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .book-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+
+    .book-title:hover {
+      text-decoration: underline;
+    }
+
+    .book-author {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .book-year {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    .book-genre {
+      display: inline-block;
+      background-color: #007bff;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .book-price {
+      font-size: 16px;
+      font-weight: bold;
+      color: #28a745;
+      margin-top: 10px;
+    }
+
+    .loading {
+      text-align: center;
+      color: #666;
+      font-size: 16px;
+      grid-column: 1 / -1;
+    }
+
+    .error {
+      color: #d9534f;
+      text-align: center;
+      padding: 20px;
+      background-color: #f8d7da;
+      border-radius: 4px;
+      grid-column: 1 / -1;
+    }
+
+    .no-results {
+      text-align: center;
+      color: #666;
+      padding: 40px;
+      font-size: 16px;
+      grid-column: 1 / -1;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      overflow: auto;
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      line-height: 20px;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #000;
+    }
+
+    .modal-title {
+      color: #007bff;
+      font-size: 24px;
+      margin-bottom: 15px;
+      margin-top: 0;
+    }
+
+    .modal-details {
+      margin-bottom: 10px;
+      color: #666;
+    }
+
+    .modal-details strong {
+      color: #333;
+    }
+
+    .modal-summary {
+      margin-top: 20px;
+      line-height: 1.6;
+      color: #333;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+      border-left: 4px solid #007bff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Books Catalog</h1>
+    
+    <div class="search-container">
+      <input 
+        type="text" 
+        id="search-input" 
+        class="search-input" 
+        placeholder="Search by title, author, or genre..."
+      >
+      <button id="search-button" class="search-button">Search</button>
+      <button id="clear-button" class="clear-button">Clear</button>
+    </div>
+
+    <div id="books-grid" class="books-grid">
+      <div class="loading">Loading books...</div>
+    </div>
+  </div>
+
+  <!-- Modal for book details -->
+  <div id="book-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modal-title" class="modal-title"></h2>
+      <div id="modal-details"></div>
+      <div id="modal-summary" class="modal-summary"></div>
+    </div>
+  </div>
+
+  <script>
+    let allBooks = [];
+    const booksGrid = document.getElementById('books-grid');
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
+    const clearButton = document.getElementById('clear-button');
+    const modal = document.getElementById('book-modal');
+    const closeModal = document.querySelector('.close');
+
+    // Fetch all books on page load
+    async function fetchBooks() {
+      try {
+        const response = await fetch('/api/books');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch books');
+        }
+        
+        allBooks = await response.json();
+        displayBooks(allBooks);
+        
+      } catch (error) {
+        console.error('Error fetching books:', error);
+        booksGrid.innerHTML = '<div class="error">Failed to load books. Please try again later.</div>';
+      }
+    }
+
+    // Display books in grid
+    function displayBooks(books) {
+      booksGrid.innerHTML = '';
+      
+      if (books.length === 0) {
+        booksGrid.innerHTML = '<div class="no-results">No books found matching your search.</div>';
+        return;
+      }
+      
+      books.forEach(book => {
+        const bookCard = document.createElement('div');
+        bookCard.className = 'book-card';
+        
+        bookCard.innerHTML = `
+          <div class="book-title" data-id="${book._id}">${book.title}</div>
+          <div class="book-author">by ${book.author}</div>
+          <div class="book-year">Published: ${book.year}</div>
+          <div class="book-genre">${book.genre}</div>
+          <div class="book-price">AUD $${book.price.toFixed(2)}</div>
+        `;
+        
+        // Add click event to show details
+        bookCard.querySelector('.book-title').addEventListener('click', () => {
+          showBookDetails(book._id);
+        });
+        
+        booksGrid.appendChild(bookCard);
+      });
+    }
+
+    // Show book details in modal
+    async function showBookDetails(bookId) {
+      try {
+        const response = await fetch(`/api/books/${bookId}`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch book details');
+        }
+        
+        const book = await response.json();
+        
+        document.getElementById('modal-title').textContent = book.title;
+        document.getElementById('modal-details').innerHTML = `
+          <div class="modal-details"><strong>Author:</strong> ${book.author}</div>
+          <div class="modal-details"><strong>Year:</strong> ${book.year}</div>
+          <div class="modal-details"><strong>Genre:</strong> ${book.genre}</div>
+          <div class="modal-details"><strong>Price:</strong> AUD $${book.price.toFixed(2)}</div>
+        `;
+        document.getElementById('modal-summary').innerHTML = `<strong>Summary:</strong><br>${book.summary}`;
+        
+        modal.style.display = 'block';
+        
+      } catch (error) {
+        console.error('Error fetching book details:', error);
+        alert('Failed to load book details. Please try again.');
+      }
+    }
+
+    // Search functionality
+    function searchBooks() {
+      const searchTerm = searchInput.value.toLowerCase().trim();
+      
+      if (!searchTerm) {
+        displayBooks(allBooks);
+        return;
+      }
+      
+      const filteredBooks = allBooks.filter(book => {
+        return (
+          book.title.toLowerCase().includes(searchTerm) ||
+          book.author.toLowerCase().includes(searchTerm) ||
+          book.genre.toLowerCase().includes(searchTerm)
+        );
+      });
+      
+      displayBooks(filteredBooks);
+    }
+
+    // Clear search
+    function clearSearch() {
+      searchInput.value = '';
+      displayBooks(allBooks);
+    }
+
+    // Event listeners
+    searchButton.addEventListener('click', searchBooks);
+    clearButton.addEventListener('click', clearSearch);
+    
+    searchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        searchBooks();
+      }
+    });
+
+    // Modal close events
+    closeModal.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+
+    // Load books on page load
+    window.addEventListener('DOMContentLoaded', fetchBooks);
+  </script>
+</body>
+</html>
