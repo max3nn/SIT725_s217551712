@@ -1,0 +1,18 @@
+{
+  "name": "sit725-6.2c",
+  "version": "1.0.0",
+  "description": "Task 6.2C - Testing with Mocha and Chai",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
+  }
+}
