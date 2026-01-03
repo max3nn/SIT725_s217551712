@@ -18,6 +18,6 @@ https://github.com/max3nn/SIT725_s217551712/tree/main/5.3C
 
 ![Browser View](./web1.png)
 
-### Book DetailedP
+### Book Detailed
 
 ![Book Detailed](./book-detailed.png)
