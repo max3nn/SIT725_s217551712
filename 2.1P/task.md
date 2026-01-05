@@ -76,8 +76,8 @@ Target users: EV drivers, fleet managers, occasional users with basic tech skill
 ---
 
 ## 4. References
-- Terzaghi, K. "Functional Requirements Elicitation." Springer, 2005.
-- IEEE Std 830-1998 | W3C WCAG 2.1 | PCI DSS v4.0
+- [IEEE Std 830-1998](https://ieeexplore.ieee.org/document/720574) 
+- [W3C WCAG 2.1](https://www.w3.org/TR/WCAG21/)
 
 **Version 1.0** | November 22, 2025
 
